@@ -1,5 +1,8 @@
 #include "MenuCarogame.h"
 #include "Game.h"
+#include "GameBot.h"
+#include <iostream>
+using namespace std;
 
 int main()
 {
@@ -12,6 +15,11 @@ int main()
         {
             Game game(menu.getBoardSize(), menu.getBoardColor(), menu);
             game.run();
+        }
+        else if (menu.isPlayPvBmode())
+        {
+            GameBot gamebot(menu.getBoardSize(), menu.getBoardColor(), menu);
+            gamebot.run();
         }
         else
         {

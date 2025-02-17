@@ -7,7 +7,7 @@ LDFLAGS = -L"D:\Libraries\SFML-2.6.1\lib" -lsfml-graphics -lsfml-window -lsfml-s
 TARGET = main.exe
 
 # Tệp nguồn và tệp đối tượng
-SOURCES = main.cpp Game.cpp menuCarogame.cpp
+SOURCES = main.cpp Game.cpp menuCarogame.cpp GameBot.cpp
 OBJECTS = $(SOURCES:.cpp=.o)
 
 # Luật mặc định

@@ -1,9 +1,8 @@
 #include "menuCarogame.h"
-#include <iostream>
 
 MenuCarogame::MenuCarogame()
     : window(sf::VideoMode(1600, 1100), "Menu Caro Game"),
-      blackSelected(true), boardSize(3), playGameRequested(false)
+      blackSelected(true), boardSize(3), playGameRequested(false), playPvBmode(false)
 {
     if (!font.loadFromFile("D:/DATA STRUCTURE & ALGORITHM_EXERCISES/Project/caro_nxn/assets/fonts/Roboto/Roboto-Medium.ttf"))
     {
@@ -76,29 +75,49 @@ MenuCarogame::MenuCarogame()
     upTriangle.setPoint(2, sf::Vector2f(sizeBoxX + sizeBox.getSize().x + triangleOffset, sizeBoxY + 45));
     upTriangle.setFillColor(sf::Color::Magenta);
 
-    playButton.setSize(sf::Vector2f(300, 80));
-    playButton.setPosition(
-        (window.getSize().x - playButton.getSize().x) / 2,
-        750);
-    playButton.setFillColor(sf::Color::Green);
+    PvPButton.setSize(sf::Vector2f(400, 150));
+    PvPButton.setPosition(
+        (window.getSize().x - PvPButton.getSize().x) / 2,
+        650);
+    PvPButton.setFillColor(sf::Color::Green);
 
-    playButtonText.setFont(font);
-    playButtonText.setString("Play");
-    playButtonText.setCharacterSize(40);
-    playButtonText.setFillColor(sf::Color::White);
-    playButtonText.setPosition(
-        playButton.getPosition().x + (playButton.getSize().x - playButtonText.getGlobalBounds().width) / 2,
-        playButton.getPosition().y + (playButton.getSize().y - playButtonText.getGlobalBounds().height) / 2 - 5);
+    PvPButtonText.setFont(font);
+    PvPButtonText.setString("Player vs Player");
+    PvPButtonText.setCharacterSize(50);
+    PvPButtonText.setFillColor(sf::Color::White);
+    PvPButtonText.setPosition(
+        PvPButton.getPosition().x + (PvPButton.getSize().x - PvPButtonText.getGlobalBounds().width) / 2,
+        PvPButton.getPosition().y + (PvPButton.getSize().y - PvPButtonText.getGlobalBounds().height) / 2 - 5);
+
+    PvBButton.setSize(sf::Vector2f(400, 150));
+    PvBButton.setPosition(
+        (window.getSize().x - PvBButton.getSize().x) / 2,        // Căn giữa
+        PvPButton.getPosition().y + PvPButton.getSize().y + 40); // Đặt PvBButton dưới PvPButton
+
+    PvBButton.setFillColor(sf::Color::Blue);
+
+    PvBButtonText.setFont(font);
+    PvBButtonText.setString("Player vs Bot");
+    PvBButtonText.setCharacterSize(50);
+    PvBButtonText.setFillColor(sf::Color::White);
+    PvBButtonText.setPosition(
+        PvBButton.getPosition().x + (PvBButton.getSize().x - PvBButtonText.getGlobalBounds().width) / 2,
+        PvBButton.getPosition().y + (PvBButton.getSize().y - PvBButtonText.getGlobalBounds().height) / 2 - 5);
 }
 
 void MenuCarogame::run()
 {
-    playGameRequested = false;
     while (window.isOpen())
     {
         processEvents();
         update();
         render();
+
+        if (playGameRequested || playPvBmode)
+        {
+            cout<< "check run menu"<< endl;
+            window.close();
+        }
     }
 }
 
@@ -117,6 +136,11 @@ bool MenuCarogame::isPlayGameRequested() const
     return playGameRequested;
 }
 
+bool MenuCarogame::isPlayPvBmode() const
+{
+    return playPvBmode;
+}
+
 void MenuCarogame::processEvents()
 {
     sf::Event event;
@@ -125,7 +149,6 @@ void MenuCarogame::processEvents()
         if (event.type == sf::Event::Closed)
         {
             window.close();
-            return;
         }
 
         if (event.type == sf::Event::MouseButtonPressed)
@@ -155,8 +178,10 @@ void MenuCarogame::render()
     window.draw(downTriangle);
     window.draw(upTriangle);
     window.draw(sizeBox);
-    window.draw(playButton);
-    window.draw(playButtonText);
+    window.draw(PvPButton);
+    window.draw(PvPButtonText);
+    window.draw(PvBButton);
+    window.draw(PvBButtonText);
 
     sf::Text sizeNumber;
     sizeNumber.setFont(font);
@@ -182,18 +207,42 @@ void MenuCarogame::handleMouseClick(const sf::Vector2i &mousePosition)
 
     if (downTriangle.getGlobalBounds().contains(mousePosition.x, mousePosition.y) && boardSize > 3)
     {
-        boardSize--;
+        if (boardSize == 5)
+        {
+            boardSize -= 2;
+        }
+        else
+        {
+            boardSize--;
+        }
     }
     else if (upTriangle.getGlobalBounds().contains(mousePosition.x, mousePosition.y) && boardSize < 100)
     {
-        boardSize++;
+        if (boardSize == 3)
+        {
+            boardSize += 2;
+        }
+        else
+        {
+            boardSize++;
+        }
     }
 
-    if (playButton.getGlobalBounds().contains(mousePosition.x, mousePosition.y))
+    if (PvPButton.getGlobalBounds().contains(mousePosition.x, mousePosition.y))
     {
         if (window.isOpen())
         {
             playGameRequested = true;
+            playPvBmode = false;
+            window.close();
+        }
+    }
+    if (PvBButton.getGlobalBounds().contains(mousePosition.x, mousePosition.y))
+    {
+        if (window.isOpen())
+        {
+            playGameRequested = false;
+            playPvBmode = true;
             window.close();
         }
     }

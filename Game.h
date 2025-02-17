@@ -5,6 +5,7 @@
 #include <vector>
 #include <string>
 #include "MenuCarogame.h"
+using namespace std;
 
 class Game
 {
@@ -21,6 +22,8 @@ private:
     char currentPlayer;
     bool gameOver = false;
     bool gameDraw = false;
+    bool playPvBmode;
+    string botDifficulty;
 
     MenuCarogame &menu;
     int emptyCells;

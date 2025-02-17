@@ -66,7 +66,6 @@ void Game::processEvents()
                 else if (newGameText.getGlobalBounds().contains(mousePosition.x, mousePosition.y))
                 {
                     openMenu();
-                    return;
                 }
             }
         }
@@ -83,8 +82,8 @@ void Game::processEvents()
 void Game::openMenu()
 {
     window.close();
-    MenuCarogame newMenu;
-    newMenu.run();
+    //MenuCarogame newMenu;
+    //newMenu.run();
 }
 
 void Game::render()
